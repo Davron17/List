@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <audio id="audio1" src="./csgo.mp3"></audio>
+    <audio id="audio2" src="./dota2.mp3"></audio>
+    <audio id="audio3" src="./pubg.mp3"></audio>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState } = React;
+      function App() {
+        const [games, setGames] = useState([
+          "Counter-Strike 2",
+          "Dota 2",
+          "PlayerUnknown's Battlegrounds",
+        ]);
+        const [players, setPlayers] = useState([
+          {
+            id: Math.random(),
+            category: "Counter-Strike 2",
+            name: "Zafar",
+          },
+          {
+            id: Math.random(),
+            category: "Counter-Strike 2",
+            name: "Shahri",
+          },
+          {
+            id: Math.random(),
+            category: "Counter-Strike 2",
+            name: "Ziyod",
+          },
+          {
+            id: Math.random(),
+            category: "Dota 2",
+            name: "Kostya",
+          },
+          {
+            id: Math.random(),
+            category: "Dota 2",
+            name: "Amir",
+          },
+          {
+            id: Math.random(),
+            category: "PlayerUnknown's Battlegrounds",
+            name: "Izzat",
+          },
+          {
+            id: Math.random(),
+            category: "PlayerUnknown's Battlegrounds",
+            name: "Davron",
+          },
+        ]);
+        const [text, setText] = useState("");
+
+        function addPlayer(e) {
+          e.preventDefault();
+          if (text.length) {
+            const selectedEl = document.querySelector("#select");
+            let selected = selectedEl.options[selectedEl.selectedIndex].value;
+            if (selected) {
+              switch (selected) {
+                case "csgo":
+                  selected = "Counter-Strike 2";
+                  const audio1 = document.querySelector("#audio1");
+                  audio1.volume = 0.4;
+                  audio1.play();
+                  break;
+                case "dota2":
+                  selected = "Dota 2";
+                  const audio2 = document.querySelector("#audio2");
+                  audio2.volume = 0.6;
+                  audio2.play();
+                  break;
+                case "pubg":
+                  selected = "PlayerUnknown's Battlegrounds";
+                  const audio3 = document.querySelector("#audio3");
+                  audio3.volume = 0.4;
+                  audio3.play();
+                  break;
+                default:
+                  break;
+              }
+              let player = {
+                id: Math.random(),
+                category: selected,
+                name: text,
+              };
+              setPlayers([...players, player]);
+              setText("");
+              selectedEl.selectedIndex = 0;
+            } else {
+              alert("Вы должны выбрать одну категорию");
+            }
+          } else {
+            alert("Вы должны ввести как минимум 1 символ");
+            setText("");
+          }
+        }
+
+        return (
+          <>
+            <div className="box">
+              <h1>Выберите категорию</h1>
+              <form>
+                <input
+                  type="text"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                />
+                <select id="select" name="games">
+                  <option hidden></option>
+                  <option value="csgo">cs2</option>
+                  <option value="dota2">dota2</option>
+                  <option value="pubg">pubg</option>
+                </select>
+                <button onClick={(e) => addPlayer(e)}>Добавить игрока</button>
+              </form>
+            </div>
+            <div className="cards">
+              {games.map((game, i) => (
+                <div className="card" key={game}>
+                  <h2>{game}</h2>
+                  <ul>
+                    {players.map((player) =>
+                      player.category === game ? (
+                        <li key={player.id}>{player.name}</li>
+                      ) : null
+                    )}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </>
+        );
+      }
+      const app = document.getElementById("root");
+      const root = ReactDOM.createRoot(app);
+      root.render(<App />);
+    </script>
+  </body>
+</html>
